@@ -1,0 +1,43 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+    <br>
+    <div class="container-fluid">
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for obj in objects|slice:":4" %}
+                <div class="col mb-4">
+                    <h4 class="card-title">{{ obj.title }}</h4>
+                    <div class="card border-0" style="width: 100%;">
+                        <a href="{{ obj.get_absolute_url }}">
+                            <img src="{% if obj.image %}{{ obj.image.url }}{% else %}{% static 'shop/img/no_image.png' %}{% endif %}" class="card-img-top rounded-custom" alt="..." style="background-color: rgba(245, 245, 245, 1);">
+                        </a>
+                    </div>
+                    <p class="card-text" style="margin-top: 14px">от {{ obj.min_price }} €</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Овальная полупрозрачная серая кнопка -->
+        <div class="container-fluid mt-4">
+            <div class="row justify-content-center">
+                <a class="btn btn-secondary btn-lg rounded-pill" style="width: 150px; height: 56px; opacity: 0.5;" href="{% url 'shop:projects' %}">Показать ещё</a>
+            </div>
+        </div>
+
+    <style>
+        .rounded-custom {
+            border-radius: 15px; /* Задаем желаемый радиус закругления углов */
+        }
+
+        /* Добавляем стили для отступа между карточками */
+        .mb-4 {
+            margin-bottom: 1rem !important; /* Задаем отступ между карточками */
+        }
+    </style>
+    <script src="{% static 'shop/js/product_list.js' %}"></script>
+{% endblock %}

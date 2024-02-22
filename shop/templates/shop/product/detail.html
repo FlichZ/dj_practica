@@ -1,0 +1,58 @@
+{% extends "shop/base.html" %}
+
+{% load static %}
+
+{% block title %}
+    {{ product.category }}: {{ product.title }}
+{% endblock %}
+
+{% block content %}
+    <br>
+    <div class="card shadow-custom border-0 col-lg-8 mx-auto">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <img src="{{ product.image.url }}" alt="" class="img-fluid rounded-0" style="width: 950px; height: 773px;">
+            </div>
+            <div class="col-lg-6" style="width: 458px; height: 600px;">
+                <div class="top">
+                    <h2 class="mt-4 font-weight-bold text-grey">{{ product.title }}</h2>
+                    <div>
+                        <span class="font-weight-bold text-grey">Категория:</span>
+                        <a href="{{ product.category.get_absolute_url }}"> {{ product.category }}</a>
+                    </div>
+                    <div>
+                        <span class="font-weight-bold text-grey"> <h5>Цена: <span class="price">€ {{ product.price }}</span> </h5></span>
+                    </div>
+                </div>
+                {% if product.available %}
+                {% else %}
+                    <div class="alert alert-danger my-3 text-center">Забронировано</div>
+                {% endif %}
+                <hr>
+                {% if product.available %}
+                <div class="mb-4">
+                    <form id="cart-add-form" action="{% url 'cart:cart_add' product.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="quantity" value="1">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary px-4 reduce_padding" type="submit" data-toggle="tooltip" data-placement="top" title="Buy">
+                                Купить
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                {% endif %}
+
+                <!-- Дополнительная информация о товаре -->
+                <div class="additional-info">
+                    <p><strong>Этаж:</strong> {{ product.floors }} из {{ product.frame.floors }}</p>
+                    <p><strong>Корпус:</strong> {{ product.frame.number }}</p>
+                    <p><strong>Заселение до:</strong> {{ product.frame.object.date }}</p>
+                    <p><strong>Отделка:</strong> Готовая отделка </p>
+                    <p><strong>Высота потолков:</strong> {{ product.frame.ceiling_height }} м</p>
+                    <p><strong>Артикул:</strong> {{ product.article }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
